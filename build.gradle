@@ -26,6 +26,20 @@ repositories {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+
+	configurations.all {
+		resolutionStrategy {
+			// Force the main Forge artifacts to use the known compatible ASM 5.0.3 version
+			eachDependency { DependencyResolveDetails details ->
+				if (details.requested.group == 'org.ow2.asm' && details.requested.name != 'asm-all') {
+					// Check if the requested version is higher than 5.2 (i.e., the problem versions like 6.2)
+					if (details.requested.version.toFloat() > 5.2f) {
+						details.useVersion '5.0.3'
+					}
+				}
+			}
+		}
+	}
 }
 
 minecraft {
